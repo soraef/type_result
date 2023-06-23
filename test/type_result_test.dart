@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:type_result/src/future_result.dart';
 
 import 'package:type_result/type_result.dart';
 
@@ -143,5 +144,15 @@ void main() {
 
     expect(await sendHelloUsecase2("soraef").then((e) => e.isOk), true);
     expect(await sendHelloUsecase2("zoraef").then((e) => e.isErr), true);
+  });
+
+  test("future_result", () async {
+    final value1 =
+        await Future.value(Result.ok(42)).map((ok) => ok * 2, (err) => 0);
+    expect(value1, 42 * 2);
+
+    final value2 =
+        await Future.value(Result.err("Error")).map((ok) => ok * 2, (err) => 0);
+    expect(value2, 0);
   });
 }

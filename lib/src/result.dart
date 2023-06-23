@@ -152,26 +152,3 @@ class Err<V, E> extends Result<V, E> {
   @override
   String toString() => 'Err($value)';
 }
-
-extension FutureResult<V, E> on Future<Result<V, E>> {
-  Future<Result<U, E>> okThen<U>(
-      Future<Result<U, E>> Function(V ok) transform) async {
-    final result = await this;
-    if (result.isOk) {
-      return transform(result.ok);
-    } else {
-      return Err(result.err);
-    }
-  }
-
-  Future<Result<V, U>> errThen<U>(
-    Future<Result<V, U>> Function(E err) transform,
-  ) async {
-    final result = await this;
-    if (result.isErr) {
-      return transform(result.err);
-    } else {
-      return Ok(result.ok);
-    }
-  }
-}
