@@ -5,3 +5,7 @@
 ## 1.0.1
 
 * Add some method to FutureResult 
+
+## 1.0.2
+
+* Fix import
