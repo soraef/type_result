@@ -52,4 +52,32 @@ extension FutureResult<V, E> on Future<Result<V, E>> {
     final result = await this;
     return result.isErr ? result.err : defaultErr;
   }
+
+  Future<V?> get okOrNull async {
+    final result = await this;
+    return result.isOk ? result.ok : null;
+  }
+
+  Future<E?> get errOrNull async {
+    final result = await this;
+    return result.isErr ? result.err : null;
+  }
+
+  Future<V> get ok async {
+    final result = await this;
+    if (result.isOk) {
+      return result.ok;
+    } else {
+      throw AssertionError("Result is Err");
+    }
+  }
+
+  Future<E> get err async {
+    final result = await this;
+    if (result.isErr) {
+      return result.err;
+    } else {
+      throw AssertionError("Result is Ok");
+    }
+  }
 }

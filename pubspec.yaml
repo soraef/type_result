@@ -1,10 +1,10 @@
 name: type_result
 description: type_result is a Dart package that simplifies error handling and outcome representation with the Result type. Handle errors effectively and enhance code reliability with ease using type_result.
-version: 1.0.2
+version: 1.0.6
 homepage: https://github.com/soraef/type_result
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: '>=2.19.6 <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:
