@@ -46,6 +46,17 @@ if(result.isOk) {
 }
 ```
 
+Result type is a sealed class, so you can use `switch` statement to handle it.
+
+```dart
+switch (result) {
+  case Ok(:final value):
+    print('The result is $value.');
+  case Except(:final value):
+    print('An exception occurred: $value.');
+}
+```
+
 ### Detailed method descriptions
 
 * `isOk`: Returns true if the result is Ok.
