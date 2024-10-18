@@ -33,6 +33,7 @@ Result<int, String> divide(int dividend, int divisor) {
 }
 ```
 
+
 In this context, `V` represents the type of the successful result, and `E` is the type of the error that can be returned.
 
 Here's how you could use the `divide` function:
@@ -46,6 +47,7 @@ if(result.isOk) {
 }
 ```
 
+
 Result type is a sealed class, so you can use `switch` statement to handle it.
 
 ```dart
@@ -56,6 +58,7 @@ switch (result) {
     print('An exception occurred: $value.');
 }
 ```
+
 
 ### Detailed method descriptions
 
@@ -91,6 +94,7 @@ print(result.exceptOr("No error")); // "Cannot divide by zero"
 
 For more advanced control flow, you can use the `when` and `map` functions.
 
+
 ### Future Support
 
 `type_result` also extends the `Future<Result<V, E>>` class to support operations with asynchronous functions. Use `okThen` and `exceptThen` methods with asynchronous functions for chaining operations and transformations in a clean and readable manner.
@@ -103,6 +107,7 @@ futureResult.okThen((value) => Future.value(Result.ok(value * 2))).then((result)
   }
 });
 ```
+
 
 ## Benefits of using Result type
 
