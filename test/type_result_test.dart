@@ -1,28 +1,28 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:type_result/type_result.dart';
+import '../lib/type_result.dart';
 
 void main() {
   test('test Ok', () {
     final result = Result<int, String>.ok(42);
 
     expect(result.isOk, true);
-    expect(result.isErr, false);
+    expect(result.isExcept, false);
 
     expect(result.ok, 42);
-    expect(() => result.err, throwsAssertionError);
+    expect(() => result.except, throwsAssertionError);
 
     expect(result.okOrNull, 42);
-    expect(result.errOrNull, null);
+    expect(result.exceptOrNull, null);
 
     expect(result.mapOk((ok) => ok.toString()).ok, "42");
-    expect(result.mapErr<int>((err) => 42).errOrNull, null);
+    expect(result.mapExcept<int>((err) => 42).exceptOrNull, null);
 
     expect(result.okThen((ok) => Result.ok(ok.toString())).ok, "42");
-    expect(result.errThen((err) => Result.ok(100)).okOrNull, 42);
+    expect(result.exceptThen((err) => Result.ok(100)).okOrNull, 42);
 
     expect(result.okOr(100), 42);
-    expect(result.errOr("hello"), "hello");
+    expect(result.exceptOr("hello"), "hello");
 
     result.when(
       (ok) => expect(ok, 42),
@@ -36,25 +36,25 @@ void main() {
   });
 
   test('test Err', () {
-    final result = Result<int, String>.err("Error");
+    final result = Result<int, String>.except("Error");
 
     expect(result.isOk, false);
-    expect(result.isErr, true);
+    expect(result.isExcept, true);
 
     expect(() => result.ok, throwsAssertionError);
-    expect(result.err, "Error");
+    expect(result.except, "Error");
 
     expect(result.okOrNull, null);
-    expect(result.errOrNull, "Error");
+    expect(result.exceptOrNull, "Error");
 
     expect(result.mapOk((ok) => ok.toString()).okOrNull, null);
-    expect(result.mapErr<int>((err) => 42).err, 42);
+    expect(result.mapExcept<int>((err) => 42).except, 42);
 
-    expect(result.okThen((ok) => Result.ok(ok.toString())).err, "Error");
-    expect(result.errThen((err) => Result.ok(100)).okOrNull, 100);
+    expect(result.okThen((ok) => Result.ok(ok.toString())).except, "Error");
+    expect(result.exceptThen((err) => Result.ok(100)).okOrNull, 100);
 
     expect(result.okOr(100), 100);
-    expect(result.errOr("hello"), "Error");
+    expect(result.exceptOr("hello"), "Error");
 
     result.when(
       (ok) => expect(true, false), // not called
@@ -68,18 +68,18 @@ void main() {
   });
 
   test('test runTry', () async {
-    final ok = Result.runTry(
+    final ok = Result.tryRun(
       () => 42,
       (e) => Exception(),
     );
 
-    final err = Result.runTry(
+    final err = Result.tryRun(
       () => throw Exception(),
       (e) => "Error",
     );
 
     expect(ok.ok, 42);
-    expect(err.err, "Error");
+    expect(err.except, "Error");
 
     Future<int> fetchNumber() async {
       return 42;
@@ -89,12 +89,12 @@ void main() {
       throw Exception();
     }
 
-    final futureOk = await Result.asyncRunTry(() => fetchNumber(), (e) => null);
+    final futureOk = await Result.tryAsyncRun(() => fetchNumber(), (e) => null);
     expect(futureOk.ok, 42);
 
     final futureErr =
-        await Result.asyncRunTry(() => fetchError(), (e) => "Error");
-    expect(futureErr.err, "Error");
+        await Result.tryAsyncRun(() => fetchError(), (e) => "Error");
+    expect(futureErr.except, "Error");
   });
 
   test("async Usecase", () async {
@@ -106,7 +106,7 @@ void main() {
       if (name == "soraef") {
         return Result.ok(1);
       }
-      return Result.err(Exception());
+      return Result.except(Exception());
     }
 
     Future<Result<void, Exception>> sendDm(
@@ -135,14 +135,14 @@ void main() {
         return sendDm(myUserId.ok, toUserId.ok, "Hello");
       }
 
-      return Result.err(Exception());
+      return Result.except(Exception());
     }
 
     expect(await sendHelloUsecase("soraef").then((e) => e.isOk), true);
-    expect(await sendHelloUsecase("zoraef").then((e) => e.isErr), true);
+    expect(await sendHelloUsecase("zoraef").then((e) => e.isExcept), true);
 
     expect(await sendHelloUsecase2("soraef").then((e) => e.isOk), true);
-    expect(await sendHelloUsecase2("zoraef").then((e) => e.isErr), true);
+    expect(await sendHelloUsecase2("zoraef").then((e) => e.isExcept), true);
   });
 
   test("future_result", () async {
@@ -150,8 +150,8 @@ void main() {
         await Future.value(Result.ok(42)).map((ok) => ok * 2, (err) => 0);
     expect(value1, 42 * 2);
 
-    final value2 =
-        await Future.value(Result.err("Error")).map((ok) => ok * 2, (err) => 0);
+    final value2 = await Future.value(Result.except("Error"))
+        .map((ok) => ok * 2, (err) => 0);
     expect(value2, 0);
   });
 }

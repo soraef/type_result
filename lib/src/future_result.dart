@@ -9,7 +9,7 @@ extension FutureResult<V, E> on Future<Result<V, E>> {
     if (result.isOk) {
       return transform(result.ok);
     } else {
-      return Err(result.err);
+      return Except(result.except);
     }
   }
 
@@ -17,8 +17,8 @@ extension FutureResult<V, E> on Future<Result<V, E>> {
     Future<Result<V, U>> Function(E err) transform,
   ) async {
     final result = await this;
-    if (result.isErr) {
-      return transform(result.err);
+    if (result.isExcept) {
+      return transform(result.except);
     } else {
       return Ok(result.ok);
     }
@@ -32,7 +32,7 @@ extension FutureResult<V, E> on Future<Result<V, E>> {
     if (result.isOk) {
       return onOk(result.ok);
     } else {
-      return onErr(result.err);
+      return onErr(result.except);
     }
   }
 
@@ -50,7 +50,7 @@ extension FutureResult<V, E> on Future<Result<V, E>> {
 
   Future<E> errOr(E defaultErr) async {
     final result = await this;
-    return result.isErr ? result.err : defaultErr;
+    return result.isExcept ? result.except : defaultErr;
   }
 
   Future<V?> get okOrNull async {
@@ -60,7 +60,7 @@ extension FutureResult<V, E> on Future<Result<V, E>> {
 
   Future<E?> get errOrNull async {
     final result = await this;
-    return result.isErr ? result.err : null;
+    return result.isExcept ? result.except : null;
   }
 
   Future<V> get ok async {
@@ -74,8 +74,8 @@ extension FutureResult<V, E> on Future<Result<V, E>> {
 
   Future<E> get err async {
     final result = await this;
-    if (result.isErr) {
-      return result.err;
+    if (result.isExcept) {
+      return result.except;
     } else {
       throw AssertionError("Result is Ok");
     }
