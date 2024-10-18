@@ -2,7 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-`type_result` is a simple yet powerful Flutter package for handling operation results. It introduces a Result type that can represent either a successful outcome (Ok) or a exception (Except). This approach aids in dealing with errors in a clean, safe, and predictable manner.
+`type_result` is a simple yet powerful Flutter package for handling operation results. It introduces a Result type that can represent either a successful outcome (Ok) or a exception (Except). 
+
+This approach aids in dealing with errors in a clean, safe, and predictable manner.
 
 ## Installation
 
