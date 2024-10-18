@@ -1,4 +1,4 @@
-abstract class Result<V, E> {
+sealed class Result<V, E> {
   const Result();
 
   factory Result.tryRun(
